@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ember Starter Kit</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+</head>
+<body>
+  <script type="text/x-handlebars">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+        {{#link-to "index" classNames="navbar-brand"}}
+          Emberoverflow
+        {{/link-to}}
+      </div>
+
+      <ul class="nav navbar-nav">
+        <li>
+          {{#link-to "about"}}
+            About site
+          {{/link-to}}
+        </li>
+      </ul>
+    </nav>
+
+    {{outlet}}
+  </script>
+
+  <!-- INDEX -->
+  <script type="text/x-handlebars" id="index">
+    <h2>{{siteTitle}}</h2>
+    <p>It is {{currentTime}}.</p>
+    <ul>
+      {{#each item in model}}
+        <li>
+          {{item.title}} - asked by {{item.author}}
+        </li>
+      {{/each}}
+    </ul>
+  </script>
+
+  <!-- ABOUT -->
+  <script type="text/x-handlebars" id="about">
+    <div class="row">
+      <div class="col-md-8">
+        <h2>About Emberoverflow</h2>
+        <p>Emberoverflow is a question and answer site for programmers and hamsters. We are a little bit different because we are written in Ember.js</p>
+      </div>
+    </div>
+  </script>
+
+
+  <script type="text/x-handlebars" id="question">
+    <div class="row">
+      <div class="col-md-8">
+        <h2>{{title}}</h2>
+        <p>
+          {{question}}
+        </p>
+        <p>
+          Asked by {{author}}
+        </p>
+      </div>
+    </div>
+</script>
+
+
+  <script src="js/libs/jquery.js"></script>
+  <script src="js/libs/ember-template-compiler.js"></script>
+  <script src="js/libs/ember.js"></script>
+  <script src="http://builds.emberjs.com/beta/ember-data.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="js/app.js"></script>
+  <!-- to activate the test runner, add the "?test" query string parameter -->
+  <script src="tests/runner.js"></script>
+</body>
+</html>
