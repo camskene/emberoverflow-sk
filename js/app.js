@@ -1,28 +1,19 @@
-App = Ember.Application.create();
+App = Ember.Application.create({
+  currentUser: localStorage['currentUser']
+});
+
+App.ApplicationStore = DS.Store.extend({
+  adapter: DS.FixtureAdapter
+});
 
 App.Router.map(function() {
   this.route('about');
+  this.route('sign-in');
+
+  this.route('ask-question');
+
+  this.resource('questions', function() {
+    this.resource('question', { path: '/:question_id'});
+  });
+
 });
-
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    var questions = [
-    {
-      title: 'How do I feed hamsters?',
-      author: 'Tom Dale'
-    }, {
-      title: 'Are humans insane?',
-      author: 'Tom Dale'
-    }];
-
-    return questions;
-  }
-});
-
-
-App.IndexController = Ember.ArrayController.extend({
-  siteTitle: 'Welcome to Emberoverflow',
-  currentTime: function() {
-    return new Date();
-  }.property()
-})

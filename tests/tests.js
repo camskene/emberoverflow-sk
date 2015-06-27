@@ -7,29 +7,107 @@ App.injectTestHelpers();
 
 // common QUnit module declaration
 module("Integration tests", {
-  beforeEach: function() {
+  setup: function() {
     // before each test, ensure the application is ready to run.
+    delete localStorage['currentUser'];
     Ember.run(App, App.advanceReadiness);
   },
 
-  afterEach: function() {
+  teardown: function() {
     // reset the application state between each test
     App.reset();
+    delete localStorage['currentUser'];
   }
 });
 
-test('index page has a title and a list of questions', function(assert) {
-  visit('/');
+test('user will be able to log in', function() {
+  visit('/sign-in');
+
+  fillIn('.form-control', 'tom@dale.com');
+
+  click('button');
+
   andThen(function() {
-    assert.equal(
-      find('h2').text(),
-      'Welcome to Emberoverflow',
-      'Application header is rendered'
+    equal(
+      find('p').text(),
+      'You are already signed in!',
+      'Signed-in message rendered'
+    )
+  })
+});
+
+test("index page has a title and a list of questions", function() {
+  visit("/");
+
+  andThen(function() {
+    equal(
+      find("h2").text(),
+      "Welcome to Emberoverflow",
+      "Application header is rendered"
     );
-    assert.equal(
-      find('ul:not(.nav) > li').length,
+
+    equal(
+      find("ul:not(.nav) > li").length,
       2,
-      'There are two questions in the list'
+      "There are two questions in the list"
+    );
+  });
+});
+
+test("question links on index page lead to questions", function() {
+  visit("/");
+  click("ul:not(.nav) > li > a:first");
+
+  andThen(function() {
+    equal(
+      find("h2").length,
+      2,
+      "Question header and applicaton header are rendered"
+    );
+
+    equal(
+      find("p").length,
+      3,
+      "Question, author and edit link are rendered"
+    );
+  });
+});
+
+test("signed-in user can ask new question", function() {
+  localStorage['currentUser'] = 201;
+  App.set('currentUser', 201);
+
+  visit("/ask-question");
+  fillIn("#title", "Question title");
+  fillIn("#question", "Question");
+  click("button");
+
+  fillIn("#answer", "Answer");
+  click("button");
+
+  andThen(function(){
+    equal(
+      find("h2:last").text(),
+      "Question title",
+      "Question title is rendered"
+    );
+
+    equal(
+      find("p#question").text().replace(/\s+/g, ''),
+      "Question",
+      "Question is rendered"
+    );
+
+    notEqual(
+      find(".panel").length,
+      0,
+      "New answer was added"
+    );
+
+    equal(
+      find(".panel-body").text().replace(/\s+/g, ''),
+      "Answer",
+      "Question was answered"
     );
   });
 });

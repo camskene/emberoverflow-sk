@@ -7,10 +7,12 @@
     "module",
     "test",
     "Ember",
+    "Em",
     "visit",
     "andThen",
     "equal",
-    "find"
+    "find",
+    "DS"
   ],
   "browser": true,
   "boss": true,
